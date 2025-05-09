@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Polygon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0d1f2d 0%, #1a3c34 100%); /* Dark teal/cyan gradient */
+      color: #fff;
+      min-height: 200vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* Background Grid Pattern */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 50px,
+        rgba(255, 255, 255, 0.05) 50px,
+        rgba(255, 255, 255, 0.05) 51px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 50px,
+        rgba(255, 255, 255, 0.05) 50px,
+        rgba(255, 255, 255, 0.05) 51px
+      );
+      z-index: -1;
+    }
+
+    /* Loader */
+    .loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 31, 45, 0.95); /* Matching dark teal */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.75s, visibility 0.75s;
+    }
+    .loader-wrapper.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Hexagon Loader Styles */
+    #colorWrapper {
+      width: 100vw;
+      height: 100vh;
+      background-color: rgb(13, 31, 45);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .socket {
+      width: 200px;
+      height: 200px;
+      position: absolute;
+      left: 50%;
+      margin-left: -100px;
+      top: 50%;
+      margin-top: -100px;
+    }
+    .hex-brick {
+      background: #2a9d8f; /* Cyan */
+      width: 30px;
+      height: 17px;
+      position: absolute;
+      top: 5px;
+      animation-name: fade;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+    }
+    .h2 {
+      transform: rotate(60deg);
+      -webkit-transform: rotate(60deg);
+    }
+    .h3 {
+      transform: rotate(-60deg);
+      -webkit-transform: rotate(-60deg);
+    }
+    .gel {
+      height: 30px;
+      width: 30px;
+      transition: all .3s;
+      -webkit-transition: all .3s;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+    .center-gel {
+      margin-left: -15px;
+      margin-top: -15px;
+      animation-name: pulse;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      -webkit-animation-name: pulse;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+    }
+    .c1 { margin-left: -47px; margin-top: -15px; }
+    .c2 { margin-left: -31px; margin-top: -43px; }
+    .c3 { margin-left: 1px; margin-top: -43px; }
+    .c4 { margin-left: 17px; margin-top: -15px; }
+    .c5 { margin-left: -31px; margin-top: 13px; }
+    .c6 { margin-left: 1px; margin-top: 13px; }
+    .c7 { margin-left: -63px; margin-top: -43px; }
+    .c8 { margin-left: 33px; margin-top: -43px; }
+    .c9 { margin-left: -15px; margin-top: 41px; }
+    .c10 { margin-left: -63px; margin-top: 13px; }
+    .c11 { margin-left: 33px; margin-top: 13px; }
+    .c12 { margin-left: -15px; margin-top: -71px; }
+    .c13 { margin-left: -47px; margin-top: -71px; }
+    .c14 { margin-left: 17px; margin-top: -71px; }
+    .c15 { margin-left: -47px; margin-top: 41px; }
+    .c16 { margin-left: 17px; margin-top: 41px; }
+    .c17 { margin-left: -79px; margin-top: -15px; }
+    .c18 { margin-left: 49px; margin-top: -15px; }
+    .c19 { margin-left: -63px; margin-top: -99px; }
+    .c20 { margin-left: 33px; margin-top: -99px; }
+    .c21 { margin-left: 1px; margin-top: -99px; }
+    .c22 { margin-left: -31px; margin-top: -99px; }
+    .c23 { margin-left: -63px; margin-top: 69px; }
+    .c24 { margin-left: 33px; margin-top: 69px; }
+    .c25 { margin-left: 1px; margin-top: 69px; }
+    .c26 { margin-left: -31px; margin-top: 69px; }
+    .c27 { margin-left: -79px; margin-top: -15px; }
+    .c28 { margin-left: -95px; margin-top: -43px; }
+    .c29 { margin-left: -95px; margin-top: 13px; }
+    .c30 { margin-left: 49px; margin-top: 41px; }
+    .c31 { margin-left: -79px; margin-top: -71px; }
+    .c32 { margin-left: -111px; margin-top: -15px; }
+    .c33 { margin-left: 65px; margin-top: -43px; }
+    .c34 { margin-left: 65px; margin-top: 13px; }
+    .c35 { margin-left: -79px; margin-top: 41px; }
+    .c36 { margin-left: 49px; margin-top: -71px; }
+    .c37 { margin-left: 81px; margin-top: -15px; }
+    .r1 {
+      animation-name: pulse;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-delay: .2s;
+      -webkit-animation-name: pulse;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-delay: .2s;
+    }
+    .r2 {
+      animation-name: pulse;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-delay: .4s;
+      -webkit-animation-name: pulse;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-delay: .4s;
+    }
+    .r3 {
+      animation-name: pulse;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-delay: .6s;
+      -webkit-animation-name: pulse;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-delay: .6s;
+    }
+    .r1 > .hex-brick {
+      animation-name: fade;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-delay: .2s;
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-delay: .2s;
+    }
+    .r2 > .hex-brick {
+      animation-name: fade;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-delay: .4s;
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-delay: .4s;
+    }
+    .r3 > .hex-brick {
+      animation-name: fade;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-delay: .6s;
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-delay: .6s;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.01); }
+      100% { transform: scale(1); }
+    }
+    @keyframes fade {
+      0% { background: #2a9d8f; } /* Cyan */
+      50% { background: #1c7066; } /* Darker cyan */
+      100% { background: #2a9d8f; }
+    }
+    @-webkit-keyframes pulse {
+      0% { -webkit-transform: scale(1); transform: scale(1); }
+      50% { -webkit-transform: scale(0.01); transform: scale(0.01); }
+      100% { -webkit-transform: scale(1); transform: scale(1); }
+    }
+    @-webkit-keyframes fade {
+      0% { background: #2a9d8f; }
+      50% { background: #1c7066; }
+      100% { background: #2a9d8f; }
+    }
+
+    /* Intro */
+    .intro {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .intro.fade-in {
+      opacity: 1;
+    }
+    .intro.hidden {
+      display: none;
+    }
+    .title {
+      font-size: 4em;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .logo {
+      width: 60px;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      z-index: 10;
+    }
+    .navbar.hidden {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 400;
+      font-size: 1.2em;
+      transition: color 0.3s ease;
+    }
+    .navbar a:hover {
+      color: #2a9d8f; /* Cyan hover effect */
+    }
+
+    /* Main Content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 70vh; /* Reduced height to minimize scrolling */
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .main-content.visible {
+      opacity: 1;
+    }
+    .main-content h1 {
+      font-size: 4em; /* Reduced font size */
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .main-content p {
+      font-size: 1.2em; /* Reduced font size */
+      font-weight: 400;
+      margin-bottom: 30px;
+      color: #e2e8f0;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 50px;
+      position: relative;
+    }
+    .cta-buttons a {
+      padding: 12px 30px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 5px;
+      transition: background 0.3s ease, transform 0.2s ease;
+      position: relative;
+      z-index: 1;
+      background: transparent;
+      border: 2px solid #2a9d8f; /* Cyan border */
+      color: #2a9d8f;
+    }
+    .cta-buttons a:hover {
+      transform: translateY(-2px);
+      background: #2a9d8f;
+      color: #fff;
+    }
+    /* Gradient Glow with Pulsating Effect */
+    .cta-buttons .gradient-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.5) 0%, rgba(42, 157, 143, 0) 70%);
+      border-radius: 5px;
+      pointer-events: none;
+      z-index: 0;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+      }
+    }
+
+    /* Features Section */
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 50px;
+    }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      width: 200px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    .feature-card h3 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      font-size: 0.9em;
+      color: #e2e8f0;
+    }
+
+    /* Product Boxes Section */
+    .product-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .product-section h2 {
+      font-size: 3em;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .product-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .product-box:hover {
+      transform: translateY(-5px);
+    }
+    .product-box img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+    .product-box h2 {
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .product-box .pricing {
+      font-size: 0.9em;
+      font-weight: 500;
+      color: #2a9d8f; /* Cyan to match theme */
+      margin-bottom: 10px;
+    }
+    .product-box p {
+      font-size: 0.9em;
+      color: #e2e8f0;
+      margin-bottom: 5px;
+    }
+    .product-box .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .product-box .status {
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .product-box .status.up {
+      background: #22c55e;
+      color: #fff;
+    }
+    .product-box .status.down {
+      background: #ef4444;
+      color: #fff;
+    }
+    .product-box .discord-btn {
+      padding: 5px 15px;
+      background: #2a9d8f; /* Cyan button */
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .product-box .discord-btn:hover {
+      background: #1c7066; /* Darker cyan on hover */
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-wrapper">
+    <div id="colorWrapper">
+      <div class="socket">
+        <div class="gel center-gel">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c1 r1">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c2 r1">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c3 r1">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c4 r1">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c5 r1">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c6 r1">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c7 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c8 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c9 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c10 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c11 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c12 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c13 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c14 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c15 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c16 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c17 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c18 r2">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c19 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c20 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c21 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c22 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c23 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c24 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c25 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c26 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c28 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c29 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c30 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c31 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c32 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c33 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c34 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c35 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c36 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+        <div class="gel c37 r3">
+          <div class="hex-brick h1"></div>
+          <div class="hex-brick h2"></div>
+          <div class="hex-brick h3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="intro">
+    <h1 class="title">POLYGON</h1>
+    <img src="polygon.png" alt="Polygon Logo" class="logo" />
+  </header>
+
+  <nav class="navbar" style="display: none;">
+    <ul>
+      <li><a href="https://discord.gg/BmPKXpbYHK" target="_blank">Discord</a></li>
+      <li><a href="target.html" target="_blank">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="main-content" style="display: none;">
+    <h1>POLYGON</h1>
+    <p>The ultimate platform for seamless collaboration.</p>
+    <div class="cta-buttons">
+      <a href="https://discord.gg/BmPKXpbYHK" target="_blank" class="secondary">Join Discord</a>
+      <a href="#checkers-section" class="secondary checkers-btn">Checkers</a>
+      <div class="gradient-glow"></div>
+    </div>
+    <div class="features">
+      <div class="feature-card">
+        <h3>Insanely Cheap</h3>
+        <p>Access all features at a low cost.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Constantly Evolving</h3>
+        <p>Regular updates and enhancements.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Rapid Enhancements</h3>
+        <p>Quick and efficient improvements.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="product-section" id="checkers-section" style="display: none;">
+    <h2>CHECKERS</h2>
+    <div class="product-grid">
+      <div class="product-box">
+        <img src="https://i.ibb.co/GzGb6Df/msmc.webp" alt="MSMC Icon" />
+        <h2>MSMC</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>Minecraft Checker</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="https://discord.gg/killin" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://i.ibb.co/GvDvN32S/randompazar.webp" alt="Randompazar Icon" />
+        <h2>Randompazar</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>Valorant Checker & Shop</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="https://discord.gg/randompazar" class="discord-btn">Discord</a>
+          <a href="https://randompazar.com" class="discord-btn">Website</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://i.ibb.co/7tp1kx1M/boltfn.jpg" alt="boltFN Icon" />
+        <h2>boltFN</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>Fortnite Checker</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="https://discord.gg/bZfEd5hB6S" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=T" alt="replace me" />
+        <h2>replace me</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="#" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=C" alt="replace me" />
+        <h2>replace me</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <div class="buttons">
+          <span class="status down">DOWN</span>
+          <a href="#" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=F" alt="replace me" />
+        <h2>replace me</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="#" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://via.placeholder.com/60/ADD8E6/000000?text=F" alt="replace me" />
+        <h2>replace me</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="#" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://via.placeholder.com/60/800080/FFFFFF?text=S" alt="replace me" />
+        <h2>replace me</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <div class="buttons">
+          <span class="status up">UP</span>
+          <a href="#" class="discord-btn">Discord</a>
+        </div>
+      </div>
+      <div class="product-box">
+        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=P" alt="replace me" />
+        <h2>replace me</h2>
+        <p class="pricing">Free or Paid</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <p>REPLACE ME REPLACE ME</p>
+        <div class="buttons">
+          <span年代: up">UP</span>
+          <a href="#" class="discord-btn">Discord</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Page Load Animation
+    window.addEventListener("load", () => {
+      const loaderWrapper = document.querySelector(".loader-wrapper");
+      const intro = document.querySelector(".intro");
+      const navbar = document.querySelector(".navbar");
+      const mainContent = document.querySelector(".main-content");
+      const productSection = document.querySelector(".product-section");
+
+      // Loader duration (1 cycle of 2s for the hexagon animation)
+      const loaderDuration = 2000; // 2 seconds
+      setTimeout(() => {
+        // Hide loader
+        loaderWrapper.classList.add("hide");
+        loaderWrapper.style.display = "none";
+
+        // Start intro animation (fade in)
+        intro.classList.add("fade-in");
+
+        // After intro fades in, wait, then fade out
+        setTimeout(() => {
+          intro.classList.add("fade-out");
+
+          // After intro fades out, show the website content
+          setTimeout(() => {
+            intro.style.display = "none"; // Fully hide intro
+            navbar.style.display = "flex"; // Show navbar
+            mainContent.style.display = "flex"; // Show main content
+            productSection.style.display = "flex"; // Show product section
+            mainContent.classList.add("visible"); // Add opacity transition
+          }, 1000); // Wait for fade-out duration (1s)
+        }, 1500); // Intro fade-in (1s) + stay visible (0.5s)
+      }, loaderDuration);
+    });
+
+    // Navbar Scroll Behavior
+    window.addEventListener("scroll", () => {
+      const navbar = document.querySelector(".navbar");
+      if (window.scrollY > 50) {
+        navbar.classList.add("hidden");
+      } else {
+        navbar.classList.remove("hidden");
+      }
+    });
+
+    // Smooth Scroll for Checkers Button
+    document.querySelector(".checkers-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      const checkersSection = document.querySelector("#checkers-section");
+      checkersSection.scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
