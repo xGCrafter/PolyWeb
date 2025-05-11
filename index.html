@@ -6,6 +6,61 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
+    .modal-content .services-list {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+    .search-bar {
+      margin: 20px 0;
+      width: 250px;
+      padding: 10px 20px 10px 30px;
+      border-radius: 12px;
+      background-color: rgba(13, 31, 45, 0.95);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(42, 157, 143, 0.3);
+      text-align: center;
+      border: 1px solid #2a9d8f;
+      font-size: 0.9em;
+      font-family: 'Poppins', sans-serif;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/54/54481.png');
+      background-size: 16px;
+      background-repeat: no-repeat;
+      background-position: 8px center;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .search-bar::placeholder {
+      color: #e2e8f0;
+    }
+    .search-bar:hover {
+      transform: scale(1.02);
+    }
+    .search-bar:focus {
+      outline: none;
+      box-shadow: 0 0 12px rgba(42, 157, 143, 0.7);
+      transform: scale(1.02);
+    }
+    .services-list {
+      max-height: 60px;
+      overflow-y: auto;
+      padding-right: 5px;
+      margin-bottom: 10px;
+      font-size: 0.9em;
+      color: #e2e8f0;
+    }
+    .services-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .services-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .services-list::-webkit-scrollbar-thumb {
+      background: #2a9d8f;
+      border-radius: 3px;
+    }
+    .services-list::-webkit-scrollbar-thumb:hover {
+      background: #1c7066;
+    }
     /* Reset */
     * {
       margin: 0;
@@ -14,13 +69,12 @@
     }
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0d1f2d 0%, #1a3c34 100%); /* Dark teal/cyan gradient */
+      background: linear-gradient(135deg, #0d1f2d 0%, #1a3c34 100%);
       color: #fff;
       min-height: 200vh;
       overflow-x: hidden;
       position: relative;
     }
-    /* Background Grid Pattern */
     body::before {
       content: '';
       position: absolute;
@@ -52,7 +106,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(13, 31, 45, 0.95); /* Matching dark teal */
+      background: rgba(13, 31, 45, 0.95);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -83,7 +137,7 @@
       margin-top: -100px;
     }
     .hex-brick {
-      background: #2a9d8f; /* Cyan */
+      background: #2a9d8f;
       width: 30px;
       height: 17px;
       position: absolute;
@@ -225,8 +279,8 @@
       100% { transform: scale(1); }
     }
     @keyframes fade {
-      0% { background: #2a9d8f; } /* Cyan */
-      50% { background: #1c7066; } /* Darker cyan */
+      0% { background: #2a9d8f; }
+      50% { background: #1c7066; }
       100% { background: #2a9d8f; }
     }
     @-webkit-keyframes pulse {
@@ -302,7 +356,7 @@
       transition: color 0.3s ease;
     }
     .navbar a:hover {
-      color: #2a9d8f; /* Cyan hover effect */
+      color: #2a9d8f;
     }
 
     /* Main Content */
@@ -311,7 +365,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 70vh; /* Reduced height to minimize scrolling */
+      height: 70vh;
       text-align: center;
       opacity: 0;
       transition: opacity 1s ease;
@@ -320,13 +374,13 @@
       opacity: 1;
     }
     .main-content h1 {
-      font-size: 4em; /* Reduced font size */
+      font-size: 4em;
       font-weight: 700;
       margin-bottom: 10px;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
     .main-content p {
-      font-size: 1.2em; /* Reduced font size */
+      font-size: 1.2em;
       font-weight: 400;
       margin-bottom: 30px;
       color: #e2e8f0;
@@ -346,7 +400,7 @@
       position: relative;
       z-index: 1;
       background: transparent;
-      border: 2px solid #2a9d8f; /* Cyan border */
+      border: 2px solid #2a9d8f;
       color: #2a9d8f;
     }
     .cta-buttons a:hover {
@@ -354,7 +408,6 @@
       background: #2a9d8f;
       color: #fff;
     }
-    /* Gradient Glow with Pulsating Effect */
     .cta-buttons .gradient-glow {
       position: absolute;
       top: 50%;
@@ -439,6 +492,7 @@
       width: 300px;
       text-align: center;
       transition: transform 0.3s ease;
+      cursor: pointer;
     }
     .product-box:hover {
       transform: translateY(-5px);
@@ -457,7 +511,7 @@
     .product-box .pricing {
       font-size: 0.9em;
       font-weight: 500;
-      color: #2a9d8f; /* Cyan to match theme */
+      color: #2a9d8f;
       margin-bottom: 10px;
     }
     .product-box p {
@@ -488,7 +542,7 @@
     }
     .product-box .discord-btn {
       padding: 5px 15px;
-      background: #2a9d8f; /* Cyan button */
+      background: #2a9d8f;
       color: #fff;
       text-decoration: none;
       border-radius: 5px;
@@ -496,7 +550,111 @@
       transition: background 0.3s ease;
     }
     .product-box .discord-btn:hover {
-      background: #1c7066; /* Darker cyan on hover */
+      background: #1c7066;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 31, 45, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+    }
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #2a9d8f;
+      border-radius: 10px;
+      padding: 20px;
+      width: 350px;
+      text-align: center;
+      position: relative;
+      transform: scale(0.7);
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 15px rgba(42, 157, 143, 0.3);
+    }
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    .modal-content img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+    .modal-content h2 {
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .modal-content .pricing {
+      font-size: 0.9em;
+      font-weight: 500;
+      color: #2a9d8f;
+      margin-bottom: 10px;
+    }
+    .modal-content p {
+      font-size: 0.9em;
+      color: #e2e8f0;
+      margin-bottom: 5px;
+    }
+    .modal-content .services-list {
+      margin-bottom: 10px;
+      font-size: 0.9em;
+      color: #e2e8f0;
+    }
+    .modal-content .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .modal-content .status {
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .modal-content .status.up {
+      background: #22c55e;
+      color: #fff;
+    }
+    .modal-content .discord-btn {
+      padding: 5px 15px;
+      background: #2a9d8f;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .modal-content .discord-btn:hover {
+      background: #1c7066;
+    }
+    .modal-content .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5em;
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .modal-content .close-btn:hover {
+      color: #2a9d8f;
     }
   </style>
 </head>
@@ -601,7 +759,6 @@
         </div>
         <div class="gel c19 r3">
           <div class="hex-brick h1"></div>
-          <div class="hex-brick h2"></div>
           <div class="hex-brick h3"></div>
         </div>
         <div class="gel c20 r3">
@@ -731,12 +888,14 @@
 
   <section class="product-section" id="checkers-section" style="display: none;">
     <h2>CHECKERS</h2>
+    <input type="text" class="search-bar" placeholder="Search..." />
     <div class="product-grid">
       <div class="product-box">
         <img src="https://i.ibb.co/GzGb6Df/msmc.webp" alt="MSMC Icon" />
         <h2>MSMC</h2>
-        <p class="pricing">Free or Paid</p>
+        <p class="pricing">Free & Paid</p>
         <p>Minecraft Checker</p>
+        <br>
         <div class="buttons">
           <span class="status up">UP</span>
           <a href="https://discord.gg/killin" class="discord-btn">Discord</a>
@@ -745,8 +904,9 @@
       <div class="product-box">
         <img src="https://i.ibb.co/GvDvN32S/randompazar.webp" alt="Randompazar Icon" />
         <h2>Randompazar</h2>
-        <p class="pricing">Free or Paid</p>
-        <p>Valorant Checker & Shop</p>
+        <p class="pricing">Paid</p>
+        <p>Valorant Checker</p>
+        <p>Shop</p>
         <div class="buttons">
           <span class="status up">UP</span>
           <a href="https://discord.gg/randompazar" class="discord-btn">Discord</a>
@@ -756,66 +916,89 @@
       <div class="product-box">
         <img src="https://i.ibb.co/7tp1kx1M/boltfn.jpg" alt="boltFN Icon" />
         <h2>boltFN</h2>
-        <p class="pricing">Free or Paid</p>
+        <p class="pricing">Free & Paid</p>
         <p>Fortnite Checker</p>
+        <br>
         <div class="buttons">
           <span class="status up">UP</span>
           <a href="https://discord.gg/bZfEd5hB6S" class="discord-btn">Discord</a>
         </div>
       </div>
       <div class="product-box">
-        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=T" alt="replace me" />
-        <h2>replace me</h2>
-        <p class="pricing">Free or Paid</p>
-        <p>REPLACE ME REPLACE ME</p>
-        <p>REPLACE ME REPLACE ME</p>
+        <img src="https://i.ibb.co/xq04N5Xc/bedhav.webp" alt="Soulfly" />
+        <h2>Soulfly</h2>
+        <p class="pricing">Paid</p>
+        <p>Steam Checker</p>
+        <br>
         <div class="buttons">
           <span class="status up">UP</span>
-          <a href="#" class="discord-btn">Discord</a>
+          <a href="discord.gg/bedavahesap" class="discord-btn">Discord</a>
+          <a href="https://linktr.ee/soulfyshop" class="discord-btn">Website</a>
         </div>
       </div>
       <div class="product-box">
-        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=C" alt="replace me" />
-        <h2>replace me</h2>
-        <p class="pricing">Free or Paid</p>
-        <p>REPLACE ME REPLACE ME</p>
-        <p>REPLACE ME REPLACE ME</p>
+        <img src="https://i.ibb.co/ksK0hRKn/zenious.webp" alt="Zenious" />
+        <h2>Zenious</h2>
+        <p class="pricing">Paid</p>
+        <p>Outlook Checker</p>
+        <p>Discord Token Checker</p>
         <div class="buttons">
-          <span class="status down">DOWN</span>
-          <a href="#" class="discord-btn">Discord</a>
+          <span class="status up">UP</span>
+          <a href="discord.gg/zenious" class="discord-btn">Discord</a>
+          <a href="zenious.cc" class="discord-btn">Website</a>
         </div>
       </div>
       <div class="product-box">
-        <img src="https://via.placeholder.com/60/FFFFFF/000000?text=F" alt="replace me" />
-        <h2>replace me</h2>
-        <p class="pricing">Free or Paid</p>
-        <p>REPLACE ME REPLACE ME</p>
-        <p>REPLACE ME REPLACE ME</p>
+        <img src="polygon.png" alt="Polygon" />
+        <h2>Polygon</h2>
+        <p class="pricing">Paid & Free</p>
+        <p>Roblox Checker</p>
+        <p>Roblox Middleware</p>
         <div class="buttons">
           <span class="status up">UP</span>
-          <a href="#" class="discord-btn">Discord</a>
+          <a href="https://discord.gg/BmPKXpbYHK" class="discord-btn">Discord</a>
         </div>
       </div>
       <div class="product-box">
-        <img src="https://via.placeholder.com/60/ADD8E6/000000?text=F" alt="replace me" />
-        <h2>replace me</h2>
-        <p class="pricing">Free or Paid</p>
-        <p>REPLACE ME REPLACE ME</p>
-        <p>REPLACE ME REPLACE ME</p>
+        <img src="https://i.ibb.co/V0Bj0JNt/wee.webp" alt="Valhalla Gen" />
+        <h2>Valhalla Gen</h2>
+        <p class="pricing">Free & Paid</p>
+        <p>Inbox Checker</p>
+        <br>
         <div class="buttons">
           <span class="status up">UP</span>
-          <a href="#" class="discord-btn">Discord</a>
+          <a href="https://discord.gg/uQs5dGbsdc" class="discord-btn">Discord</a>
         </div>
       </div>
       <div class="product-box">
-        <img src="https://via.placeholder.com/60/800080/FFFFFF?text=S" alt="replace me" />
-        <h2>replace me</h2>
-        <p class="pricing">Free or Paid</p>
-        <p>REPLACE ME REPLACE ME</p>
-        <p>REPLACE ME REPLACE ME</p>
+        <img src="https://i.ibb.co/0VG2nS6b/rg.webp" alt="Raven G3N" />
+        <h2>Raven G3N</h2>
+        <p class="pricing">Paid</p>
+        <div class="services-list">
+          <p>Netflix Checker</p>
+          <p>Spotify Checker</p>
+          <p>Tiktok Checker</p>
+          <p>Instagram Checker</p>
+          <p>PrimeVideo Checker</p>
+          <p>Crunchyroll Checker</p>
+          <p>Facebook Checker</p>
+          <p>Discord Checker</p>
+          <p>ChatGPT Checker</p>
+          <p>EpicGames Checker</p>
+          <p>Google Checker</p>
+          <p>Steam Checker</p>
+          <p>Ubisoft Checker</p>
+          <p>Twitter Checker</p>
+          <p>Reddit Checker</p>
+          <p>Hulu Checker</p>
+          <p>DisneyPlus Checker</p>
+          <p>HBO Checker</p>
+          <p>Apple Checker</p>
+          <p>Microsoft Checker</p>
+        </div>
         <div class="buttons">
           <span class="status up">UP</span>
-          <a href="#" class="discord-btn">Discord</a>
+          <a href="https://discord.gg/ZjUU3SQr3M" class="discord-btn">Discord</a>
         </div>
       </div>
       <div class="product-box">
@@ -825,12 +1008,25 @@
         <p>REPLACE ME REPLACE ME</p>
         <p>REPLACE ME REPLACE ME</p>
         <div class="buttons">
-          <span年代: up">UP</span>
+          <span class="status up">UP</span>
           <a href="#" class="discord-btn">Discord</a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Modal Structure -->
+  <div class="modal" id="checker-modal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <img id="modal-img" src="" alt="Checker Icon" />
+      <h2 id="modal-title"></h2>
+      <p id="modal-pricing" class="pricing"></p>
+      <div id="modal-description"></div>
+      <div id="modal-services" class="services-list"></div>
+      <div id="modal-buttons" class="buttons"></div>
+    </div>
+  </div>
 
   <script>
     // Page Load Animation
@@ -841,29 +1037,24 @@
       const mainContent = document.querySelector(".main-content");
       const productSection = document.querySelector(".product-section");
 
-      // Loader duration (1 cycle of 2s for the hexagon animation)
-      const loaderDuration = 2000; // 2 seconds
+      const loaderDuration = 2000;
       setTimeout(() => {
-        // Hide loader
         loaderWrapper.classList.add("hide");
         loaderWrapper.style.display = "none";
 
-        // Start intro animation (fade in)
         intro.classList.add("fade-in");
 
-        // After intro fades in, wait, then fade out
         setTimeout(() => {
           intro.classList.add("fade-out");
 
-          // After intro fades out, show the website content
           setTimeout(() => {
-            intro.style.display = "none"; // Fully hide intro
-            navbar.style.display = "flex"; // Show navbar
-            mainContent.style.display = "flex"; // Show main content
-            productSection.style.display = "flex"; // Show product section
-            mainContent.classList.add("visible"); // Add opacity transition
-          }, 1000); // Wait for fade-out duration (1s)
-        }, 1500); // Intro fade-in (1s) + stay visible (0.5s)
+            intro.style.display = "none";
+            navbar.style.display = "flex";
+            mainContent.style.display = "flex";
+            productSection.style.display = "flex";
+            mainContent.classList.add("visible");
+          }, 1000);
+        }, 1500);
       }, loaderDuration);
     });
 
@@ -882,6 +1073,103 @@
       e.preventDefault();
       const checkersSection = document.querySelector("#checkers-section");
       checkersSection.scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Search Bar Functionality
+    const searchBar = document.querySelector(".search-bar");
+    const productBoxes = document.querySelectorAll(".product-box");
+
+    searchBar.addEventListener("input", (e) => {
+      const searchText = e.target.value.toLowerCase();
+
+      productBoxes.forEach((box) => {
+        const title = box.querySelector("h2").textContent.toLowerCase();
+        const descriptions = Array.from(box.querySelectorAll("p:not(.pricing)"))
+          .map((p) => p.textContent.toLowerCase())
+          .join(" ");
+
+        if (title.includes(searchText) || descriptions.includes(searchText)) {
+          box.style.display = "block";
+        } else {
+          box.style.display = "none";
+        }
+      });
+    });
+
+    // Modal Functionality
+    const modal = document.getElementById("checker-modal");
+    const modalImg = document.getElementById("modal-img");
+    const modalTitle = document.getElementById("modal-title");
+    const modalPricing = document.getElementById("modal-pricing");
+    const modalDescription = document.getElementById("modal-description");
+    const modalServices = document.getElementById("modal-services");
+    const modalButtons = document.getElementById("modal-buttons");
+    const closeBtn = document.querySelector(".close-btn");
+
+    productBoxes.forEach((box) => {
+      box.addEventListener("click", (e) => {
+        // Prevent clicks on buttons/links inside the box from triggering the modal
+        if (e.target.classList.contains("discord-btn") || e.target.classList.contains("status")) {
+          return;
+        }
+
+        // Get checker details
+        const imgSrc = box.querySelector("img").src;
+        const title = box.querySelector("h2").textContent;
+        const pricing = box.querySelector(".pricing").textContent;
+        const descriptionElements = Array.from(box.querySelectorAll("p:not(.pricing)")).filter(
+          (p) => !p.closest(".services-list")
+        );
+        const services = box.querySelector(".services-list");
+        const buttons = box.querySelector(".buttons").innerHTML;
+
+        // Populate modal
+        modalImg.src = imgSrc;
+        modalTitle.textContent = title;
+        modalPricing.textContent = pricing;
+
+        // Populate description (excluding services-list content)
+        modalDescription.innerHTML = "";
+        descriptionElements.forEach((p) => {
+          if (p.textContent.trim() !== "") {
+            const pElement = document.createElement("p");
+            pElement.textContent = p.textContent;
+            modalDescription.appendChild(pElement);
+          }
+        });
+
+        // Populate services if they exist (e.g., for Raven G3N)
+        modalServices.innerHTML = "";
+        if (services) {
+          modalServices.style.display = "block";
+          const serviceItems = services.querySelectorAll("p");
+          serviceItems.forEach((item) => {
+            const pElement = document.createElement("p");
+            pElement.textContent = item.textContent;
+            modalServices.appendChild(pElement);
+          });
+        } else {
+          modalServices.style.display = "none";
+        }
+
+        // Populate buttons
+        modalButtons.innerHTML = buttons;
+
+        // Show modal
+        modal.classList.add("show");
+      });
+    });
+
+    // Close modal when close button is clicked
+    closeBtn.addEventListener("click", () => {
+      modal.classList.remove("show");
+    });
+
+    // Close modal when clicking outside the modal content
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("show");
+      }
     });
   </script>
 </body>
